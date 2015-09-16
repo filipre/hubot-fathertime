@@ -25,14 +25,14 @@ isHuman = (user) ->
 
 getUniqueTz = (users) ->
   timeZones = {}
+
   for userId, user of users
-    if isHuman user
-      tz = user.tz
-      if tz == null
-        tz = 'America/Los_Angeles'
-      if !timeZones[tz]
-        timeZones[tz] = []
-      timeZones[tz].push(user)
+    tz = user.tz
+    if tz == null
+      tz = 'America/Los_Angeles'
+    if !timeZones[tz]
+      timeZones[tz] = []
+    timeZones[tz].push(user)
 
   return timeZones
 
@@ -65,7 +65,6 @@ buildReplyMsg = (result, users, user) ->
 
   return msg;
 
-
 module.exports = (robot) ->
 
   robot.hear /.*/, (res) ->
@@ -76,14 +75,25 @@ module.exports = (robot) ->
       return
 
     message = res.message
-    users = res.message.rawMessage._client.users
-    user = users[res.message.user.id]
 
     # check if text contains any time data
-    results = chrono.parse res.message.text
+    results = chrono.parse message.text
     # why is (isValidMessage message) necessary? "|| !isValidMessage message"
-    if !msgHasTimeStrings results || !isHuman user
+    if !msgHasTimeStrings results
       return
+
+    channel = message.rawMessage.channel            # current channel
+    channels = message.rawMessage._client.channels  # all channels of slack
+    allUsers = message.rawMessage._client.users     # all users of slack
+    members = channels[channel].members             # members of a channel (ids)
+
+    # filter users: member?, bot?
+    users = {}
+    for userId, user of allUsers
+      if !(userId in members) || !(isHuman user)
+        continue
+      users[userId] = user
+    user = users[message.user.id]
 
     for result in results
       msg = buildReplyMsg(result, users, user)

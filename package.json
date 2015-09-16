@@ -1,7 +1,7 @@
 {
   "name": "hubot-fathertime",
   "description": "A Hubot script that converts time to your local timezone",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Chris Asche, David Farr, René Filip",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts, slack, time, timezone, convert",
