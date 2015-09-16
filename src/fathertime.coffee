@@ -12,11 +12,14 @@
 #   <optional notes required for the script>
 #
 # Author:
-#   René Filip <rene.filip@sap.com>
+#   Chris Asche, David Farr, René Filip
 
 module.exports = (robot) ->
   robot.respond /hello/, (res) ->
     res.reply "hello!"
 
   robot.hear /orly/, ->
+    # implies that hubot is using the slack adapter.
+    # currently, there is no "general" way to get the users' timezones.
+    console.log(res.message.rawMessage._client.users);
     res.send "yarly"
