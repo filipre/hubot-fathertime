@@ -6,9 +6,9 @@ See [`src/fathertime.coffee`](src/fathertime.coffee) for full documentation.
 
 ## Development
 
-1. Copy [`fathertime.coffee`](src/fathertime.coffee) into your hubot `scripts` folder.
-2. Add `fathertime` to the array in `hubot-scripts.json`.
-3. Restart Hubot.
+1. Download repository
+2. npm link ... instead of npm install ...
+3. Add `hubot-fathertime` to `hubot-scripts.json`
 
 <!--
 
