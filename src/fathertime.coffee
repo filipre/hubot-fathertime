@@ -14,11 +14,17 @@ chrono = require 'chrono-node'
 # Default Configuration
 dateFormat = if process.env.HUBOT_FATHERTIME_DATEFORMAT then process.env.HUBOT_FATHERTIME_DATEFORMAT else 'MMM Do, h:mm a (z)'
 
-msgHasTimeStrings = (results) ->
-  return results.length > 0
+providerIsSlack = (robot) ->
+  return robot.adapterName == 'slack'
 
-# isValidMessage = (message) ->
-#   return message.type == 'message'
+resultContainsTimeTags = (result) ->
+  for tagName, isTrue of result.tags
+    if tagName in ["ENMergeDateTimeRefiner", "ENTimeAgoFormatParser", "ENTimeExpressionParser"] && isTrue
+      return true
+  return false
+
+filterResults = (results) ->
+  return (results.filter (result) -> resultContainsTimeTags result)
 
 isHuman = (user) ->
   return user.is_bot == false
@@ -56,30 +62,25 @@ buildReplyMsg = (result, users, user) ->
 
   for z of timeZones
     msg += start.clone().tz(z).format(dateFormat) + (if end then ' to ' + end.clone().tz(z).format(dateFormat) else ' ')
-    msg += ' ('
-    timeZones[z].forEach (user, i) ->
-      msg += user.name
-      msg += if timeZones[z].length - 1 == i then '' else ', '
-      return
-    msg += ')' + '\n'
 
   return msg;
 
 module.exports = (robot) ->
 
+  # check if slack adapter is used
+  if !providerIsSlack(robot)
+    robot.logger.error "Fathertime: Currently, only Slack is supported for fathertime (since it gives us information about the timezones of the user)"
+
   robot.hear /.*/, (res) ->
 
-    # check if slack adapter is used
-    if !res.robot.adapterName == 'slack'
-      console.log "Currently, only Slack is supported (since it gives us information about the timezones of the user)"
+    if !providerIsSlack(robot)
       return
 
     message = res.message
 
     # check if text contains any time data
-    results = chrono.parse message.text
-    # why is (isValidMessage message) necessary? "|| !isValidMessage message"
-    if !msgHasTimeStrings results
+    results = filterResults (chrono.parse message.text)
+    if results.length <= 0
       return
 
     channel = message.rawMessage.channel            # current channel
@@ -97,5 +98,5 @@ module.exports = (robot) ->
 
     for result in results
       msg = buildReplyMsg(result, users, user)
-      console.log msg
+      robot.logger.info msg
       res.send msg
