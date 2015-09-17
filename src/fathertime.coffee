@@ -61,7 +61,7 @@ buildReplyMsg = (result, users, user) ->
   msg = user.name + ': \'' + result.text + '\'\n';
 
   for z of timeZones
-    msg += start.clone().tz(z).format(dateFormat) + (if end then ' to ' + end.clone().tz(z).format(dateFormat) else ' ')
+    msg += start.clone().tz(z).format(dateFormat) + (if end then ' to ' + end.clone().tz(z).format(dateFormat) else ' ') + '\n'
 
   return msg;
 
