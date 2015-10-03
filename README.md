@@ -4,7 +4,7 @@
 
 A Hubot script that converts any time to your (and others) local timezone.
 
-![example](example.png)
+![example](https://raw.githubusercontent.com/filipre/hubot-fathertime/master/example.png)
 
 Please see [dfarr/fathertime](https://github.com/dfarr/fathertime) for the original project
 
