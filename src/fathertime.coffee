@@ -2,7 +2,7 @@
 #   A Hubot script that converts time to your local timezone
 #
 # Configuration:
-#   HUBOT_FATHERTIME_DATEFORMAT
+#   HUBOT_FATHERTIME_DATEFORMAT (optional)
 #
 # Author:
 #   Chris Asche, David Farr, René Filip

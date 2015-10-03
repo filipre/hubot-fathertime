@@ -1,16 +1,12 @@
 # hubot-fathertime
 
-A Hubot script that converts time to your local timezone
+*this script only works with the [Slack](https://github.com/slackhq/hubot-slack) adapter*
 
-See [`src/fathertime.coffee`](src/fathertime.coffee) for full documentation.
+A Hubot script that converts any time to your (and others) local timezone.
 
-## Development
+![example](example.png)
 
-1. Download repository
-2. npm link ... instead of npm install ...
-3. Add `hubot-fathertime` to `hubot-scripts.json`
-
-<!--
+Please see [dfarr/fathertime](https://github.com/dfarr/fathertime) for the original project
 
 ## Installation
 
@@ -26,11 +22,6 @@ Then add **hubot-fathertime** to your `external-scripts.json`:
 ]
 ```
 
-## Sample Interaction
+## Configuration
 
-```
-user1>> hubot hello
-hubot>> hello!
-```
-
--->
+(optional) You can set the `HUBOT_FATHERTIME_DATEFORMAT` environment variable to return a custom date format.
